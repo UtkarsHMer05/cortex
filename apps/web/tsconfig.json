@@ -10,7 +10,7 @@
         "../../packages/ui/src/*"
       ],
       "@workspace/backend/*": [
-        "../../packages/backend/*"
+        "../../packages/backend/convex/*"
       ],
     },
     "plugins": [
