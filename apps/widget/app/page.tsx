@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-svh">
       <Button onClick={() => addUser()}>Add</Button>
-      <p>Apps/web</p>
+      <p>Apps/widget</p>
       <div className="max-w-sm w-full mx-auto">
         {JSON.stringify(users, null, 2)}
       </div>
