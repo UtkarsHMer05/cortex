@@ -18,6 +18,8 @@ export const add = mutation({
         if (!orgId) {
             throw new Error("Missing organization context");
         }
+
+        throw new Error("Tracking Tests");
         const userId = await ctx.db.insert("users", {
 
             name: "utk"

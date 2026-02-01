@@ -12,9 +12,6 @@ export default function Page() {
       <p>Apps/web</p>
       <UserButton />
       <OrganizationSwitcher hidePersonal />
-      <div className="max-w-sm w-full mx-auto">
-        {JSON.stringify(users, null, 2)}
-      </div>
     </div>
   )
 }
