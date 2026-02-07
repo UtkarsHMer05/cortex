@@ -14,8 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 import { Doc } from "@workspace/backend/_generated/dataModel";
-import { useAtom, useAtomValue } from "jotai";
-import { contactSessionIdAtomFamily, organizationIdAtom } from "../../atoms/widget-atoms";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { contactSessionIdAtomFamily, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
 
 
 const formSchema = z.object({
@@ -23,9 +23,8 @@ const formSchema = z.object({
     email: z.string().email("Invalid email address"),
 });
 
-const organizationId = "123";
-
 export const WidgetAuthScreen = () => {
+    const setScreen = useSetAtom(screenAtom);
     const organizationId = useAtomValue(organizationIdAtom);
     const [, setContactSessionId] = useAtom(
         contactSessionIdAtomFamily(organizationId || "")
@@ -66,6 +65,7 @@ export const WidgetAuthScreen = () => {
             metadata,
         });
         setContactSessionId(contactSessionId);
+        setScreen("selection");
     };
 
     return (
