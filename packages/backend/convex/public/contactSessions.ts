@@ -53,7 +53,7 @@ export const validate = mutation({
         if (contactSession.expiresAt < Date.now()) {
             return { valid: false, reason: "Contact session expired" };
         }
-        return {valid:true,contactSession}
-        
+        return { valid: true, contactSession }
+
     }
 })
