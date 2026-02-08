@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Provider } from "jotai"
-import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { ConvexProvider, ConvexReactClient } from "convex/react"
 
 
