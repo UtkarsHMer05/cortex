@@ -3,9 +3,9 @@ import { components, internal } from "../_generated/api";
 import { action, query } from "../_generated/server";
 import { supportAgent } from "../system/ai/agents/supportAgent";
 import { paginationOptsValidator } from "convex/server";
-import { escalateConversation } from "../system/ai/agents/tools/escalateConversation";
-import { resolveConversation } from "../system/ai/agents/tools/resolveConversation";
 import { saveMessage } from "@convex-dev/agent";
+import { resolveConversation } from "../system/ai/tools/resolveConversation";
+import { escalateConversation } from "../system/ai/tools/escalateConversation";
 
 export const create = action({
     args: {

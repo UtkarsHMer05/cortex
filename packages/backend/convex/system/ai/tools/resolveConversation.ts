@@ -1,16 +1,16 @@
 import { createTool } from "@convex-dev/agent";
 import { z } from "zod";
-import { supportAgent } from "../supportAgent";
-import { internal } from "../../../../_generated/api";
+import { supportAgent } from "../agents/supportAgent";
+import { internal } from "../../../_generated/api";
 
-export const escalateConversation = createTool({
-    description: "Escalate a conversation",
+export const resolveConversation = createTool({
+    description: "Resolve a conversation",
     args: z.object({}),
     handler: async (ctx) => {
         if (!ctx.threadId) {
             return "Missing thread ID";
         }
-        await ctx.runMutation(internal.system.conversations.escalate, {
+        await ctx.runMutation(internal.system.conversations.resolve, {
             threadId: ctx.threadId,
         });
 
@@ -18,10 +18,10 @@ export const escalateConversation = createTool({
             threadId: ctx.threadId,
             message: {
                 role: "assistant",
-                content: "Conversation escalated to a human operator.",
+                content: "Conversation resolved.",
             },
         });
 
-        return "Conversation escalated to a human operator.";
+        return "Conversation resolved";
     },
 });
