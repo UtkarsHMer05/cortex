@@ -6,6 +6,7 @@ import { supportAgent } from "../system/ai/agents/supportAgent";
 import { paginationOptsValidator } from "convex/server";
 import { saveMessage } from "@convex-dev/agent";
 import { google } from "@ai-sdk/google";
+import { OPERATOR_MESSAGE_ENHANCEMENT_PROMPT } from "../system/ai/constants";
 
 
 export const enhanceResponse = action({
@@ -34,7 +35,7 @@ export const enhanceResponse = action({
             messages: [
                 {
                     role: 'system',
-                    content: "Enhance the operator's message to be more professional, clear, and helpful. Maintain the original intent and key information.Don't give validation be like making/replacing the sentence better professionalism, also dont give the option like you can select the best option be like take the best possible option usiting to scenario and replace the text",
+                    content: OPERATOR_MESSAGE_ENHANCEMENT_PROMPT,
                 },
                 {
                     role: 'user',
