@@ -9,7 +9,29 @@
 
 ---
 
-## 🚀 Features
+### 🚀 Key Features
+
+- 🤖 **Real-time AI Chat** using Convex Agents
+- 📣 **Human Handoff & Auto-Close** using AI Tools
+- 🧠 **Smart Knowledge Base** using Embeddings and RAG
+- 🔊 **Voice Support** by VAPI
+- 🔑 **API Key Storage** by AWS Secrets Manager
+- 👥 **Team Management** by Clerk
+- 🔐 **Authentication** by Clerk
+- 💳 **Subscription Billing** by Clerk
+- 🛠️ **Embeddable Widget**
+- 📈 **Operator Dashboard** for Managing Conversations
+- 🧰 **Developer Toolkit** for Embed Script
+- 🧠 **AI Model Support**: OpenAI, Anthropic, Grok
+- 🌐 **Built with Next.js 15**
+- ⚛️ **Powered by React 19**
+- 🎨 **Styled with Tailwind v4**
+- 🧩 **Components** from shadcn/ui
+- 📦 **Monorepo** managed with Turborepo
+- 🪵 **Error Tracking** by Sentry
+- 🧑💻 **Pull Request Reviews** by CodeRabbit
+
+---
 
 ### 🧠 The Neural Core (AI Agent)
 Cortex implements a sophisticated **Agentic Workflow** using `@convex-dev/agent` and Google's Gemini 2.5 Flash model.
@@ -57,9 +79,10 @@ A standalone, high-performance React widget that can be added to any website.
 - **Customizable**: Change the greeting, primary colors, and behavior via the Admin Dashboard.
 ![Widget Preview](apps/landing/public/images/widget-preview.png)
 
-### 🛡️ Enterprise Security & Billing
+### 🛡️ Enterprise Security & Infrastructure
 - **Authentication**: Powered by **Clerk** with support for Multi-Factor Authentication (MFA).
 - **Row-Level Security (RLS)**: Strict data access policies ensure organizations can only access their own data.
+- **Bank-Grade Secret Management**: All third-party API keys (Vapi, Gemini, etc.) are stored in **AWS Secrets Manager**, never in the codebase or client-side bundles.
 - **Subscription Management**: Automated webhook handling for subscription status changes (Active/Past Due).
 
 ---
@@ -84,6 +107,10 @@ graph TD
         Cron[Cron Jobs]
     end
 
+    subgraph "Secure Infrastructure"
+        Secrets[AWS Secrets Manager]
+    end
+
     subgraph "External Services"
         Vapi[Vapi Voice AI]
         Gemini[Google Gemini Flash]
@@ -97,6 +124,10 @@ graph TD
     API <--> DB
     API -->|Auth| Clerk
     
+    %% Secret Management
+    API -.->|Fetch Keys| Secrets
+    Agent -.->|Fetch Keys| Secrets
+
     %% AI Flow
     Agent -->|Query| VectorDB
     Agent -->|Inference| Gemini
