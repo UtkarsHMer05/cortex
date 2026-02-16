@@ -11,9 +11,12 @@ import {
 } from "@workspace/ui/components/ai/message";
 import { Button } from "@workspace/ui/components/button";
 import { cn } from "@workspace/ui/lib/utils";
-import { useSetAtom } from "jotai";
-import { ArrowLeftIcon, MicIcon, MicOffIcon } from "lucide-react";
-import { screenAtom } from "../../atoms/widget-atoms";
+import { useAtomValue, useSetAtom } from "jotai";
+import { ArrowLeftIcon, Loader2, MicIcon, MicOffIcon } from "lucide-react";
+import { contactSessionIdAtomFamily, conversationIdAtom, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
+import { useEffect, useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "@workspace/backend/_generated/api";
 
 export const WidgetVoiceScreen = () => {
     const setScreen = useSetAtom(screenAtom);
@@ -24,7 +27,55 @@ export const WidgetVoiceScreen = () => {
         startCall,
         endCall,
         isConnecting,
+        isTransferring,
     } = useVapi();
+
+    const organizationId = useAtomValue(organizationIdAtom);
+    const contactSessionId = useAtomValue(
+        contactSessionIdAtomFamily(organizationId || "")
+    );
+    const setConversationId = useSetAtom(conversationIdAtom);
+    const createEscalated = useMutation(api.public.conversations.createEscalated);
+
+    const [isProcessingTransfer, setIsProcessingTransfer] = useState(false);
+
+    useEffect(() => {
+        if (isTransferring && !isProcessingTransfer) {
+            const handleTransfer = async () => {
+                if (!organizationId || !contactSessionId) return;
+
+                setIsProcessingTransfer(true);
+                endCall();
+
+                try {
+                    const conversationId = await createEscalated({
+                        organizationId,
+                        contactSessionId,
+                        voiceTranscript: transcript,
+                    });
+                    setConversationId(conversationId);
+                    setScreen("chat");
+                } catch (error) {
+                    console.error("Failed to escalate conversation:", error);
+                    setIsProcessingTransfer(false);
+                }
+            };
+
+            handleTransfer();
+        }
+    }, [isTransferring, isProcessingTransfer, organizationId, contactSessionId, transcript, endCall, createEscalated, setConversationId, setScreen]);
+
+    if (isProcessingTransfer) {
+        return (
+            <div className="flex h-full flex-col items-center justify-center gap-4 bg-background p-6 text-center">
+                <Loader2 className="size-10 animate-spin text-primary" />
+                <div>
+                    <h3 className="text-lg font-semibold">Transferring to agent...</h3>
+                    <p className="text-sm text-muted-foreground">Please wait while we connect you to a human agent.</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>

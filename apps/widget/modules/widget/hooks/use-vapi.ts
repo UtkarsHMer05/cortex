@@ -16,6 +16,7 @@ export const useVapi = () => {
     const [isConnecting, setIsConnecting] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [transcript, setTranscript] = useState<TranscriptMessage[]>([]);
+    const [isTransferring, setIsTransferring] = useState(false);
 
     useEffect(() => {
         if (!vapiSecrets) {
@@ -53,6 +54,29 @@ export const useVapi = () => {
                         text: message.transcript,
                     }
                 ]);
+
+                // Keyword fallback for transfer - STRICTER checks to avoid premature transfer on "would you like to..."
+                if (message.role === "assistant" && (
+                    message.transcript.toLowerCase().includes("transferring you") ||
+                    message.transcript.toLowerCase().includes("connecting you now") ||
+                    message.transcript.toLowerCase().includes("please hold while i") ||
+                    message.transcript.toLowerCase().includes("transfer you now") ||
+                    message.transcript.toLowerCase().includes("i will transfer you") ||
+                    message.transcript.toLowerCase().includes("transfer you to a human agent")
+                )) {
+                    console.log("Transfer triggered by keyword detection");
+                    setIsTransferring(true);
+                }
+            }
+            if (message.type === "function-call" && (
+                message.functionCall.name === "transferCall" ||
+                message.functionCall.name === "escalateToSupport" ||
+                message.functionCall.name === "forwardCall"
+            )) {
+                console.log("Transfer triggered by function call:", message.functionCall.name);
+                setIsTransferring(true);
+            } else if (message.type === "function-call") {
+                console.log("Unhandled function call:", message.functionCall);
             }
         });
         return () => {
@@ -82,5 +106,6 @@ export const useVapi = () => {
         transcript,
         startCall,
         endCall,
+        isTransferring,
     }
 };

@@ -141,3 +141,75 @@ export const create = mutation({
 
     },
 });
+
+export const createEscalated = mutation({
+    args: {
+        organizationId: v.string(),
+        contactSessionId: v.id("contactSessions"),
+        voiceTranscript: v.array(v.object({
+            role: v.union(v.literal("user"), v.literal("assistant")),
+            text: v.string(),
+        })),
+    },
+    handler: async (ctx, args) => {
+        const session = await ctx.db.get(args.contactSessionId);
+
+        if (!session || session.expiresAt < Date.now()) {
+            throw new ConvexError({
+                code: "UNAUTHORIZED",
+                message: "Invalid session",
+            });
+        }
+        // This refreshes the user's session if they are within the threshold
+        await ctx.runMutation(internal.system.contactSessions.refresh, {
+            contactSessionId: args.contactSessionId,
+        });
+
+        const { threadId } = await supportAgent.createThread(ctx, {
+            userId: args.organizationId,
+        });
+
+        const widgetSettings = await ctx.db
+            .query("widgetSettings")
+            .withIndex("by_organization_id", (q) =>
+                q.eq("organizationId", args.organizationId),
+            )
+            .unique();
+
+        // Add transcript context
+        await saveMessage(ctx, components.agent, {
+            threadId,
+            message: {
+                role: "system",
+                content: `Here is the transcript of the voice call that just ended. The user has been transferred to a human agent because the voice assistant could not help them. Please review the transcript and assist the user.\n\n${args.voiceTranscript.map((message) => `${message.role}: ${message.text}`).join("\n")}`,
+            },
+        });
+
+        // Add greeting message FIRST
+        await saveMessage(ctx, components.agent, {
+            threadId,
+            message: {
+                role: "assistant",
+                content: widgetSettings?.greetMessage || "Hello, how can I help you today?",
+            },
+        });
+
+        // Add user transfer request message SECOND
+        await saveMessage(ctx, components.agent, {
+            threadId,
+            message: {
+                role: "user",
+                content: "I'd like to speak to a human agent.",
+            },
+        });
+
+        const conversationId = await ctx.db.insert("conversations", {
+            contactSessionId: session._id,
+            status: "escalated",
+            organizationId: args.organizationId,
+            threadId,
+        });
+
+        return conversationId;
+    },
+});
