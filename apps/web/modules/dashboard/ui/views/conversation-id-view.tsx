@@ -85,7 +85,7 @@ export const ConversationIdView = ({
             const response = await enhanceResponse({ prompt: currentValue });
             form.setValue("message", response)
         } catch (error) {
-            toast.error("Something went wrong") 
+            toast.error("Something went wrong")
             console.error(error);
         } finally {
             setIsEnhancing(false);
@@ -140,17 +140,28 @@ export const ConversationIdView = ({
     }
     return (
         <div className="flex h-full flex-col bg-muted">
-            <header className="flex items-center justify-between border-b bg-background p-2.5">
-                <Button size="sm" variant="ghost">
-                    <MoreHorizontalIcon />
-                </Button>
-                {!!conversation && (
-                    <ConversationStatusButton
-                        status={conversation.status}
-                        onClick={handleToggleStatus}
-                        disabled={isUpdatingStatus}
+            <header className="flex items-center justify-between border-b bg-background px-4 py-2.5">
+                <div className="flex items-center gap-2.5">
+                    <DicebearAvatar
+                        seed={conversation?.contactSessionId ?? "user"}
+                        size={28}
                     />
-                )}
+                    <span className="text-sm font-semibold">
+                        {conversation?.contactSession?.name ?? "Customer"}
+                    </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                    {!!conversation && (
+                        <ConversationStatusButton
+                            status={conversation.status}
+                            onClick={handleToggleStatus}
+                            disabled={isUpdatingStatus}
+                        />
+                    )}
+                    <Button size="sm" variant="ghost">
+                        <MoreHorizontalIcon className="size-4" />
+                    </Button>
+                </div>
             </header>
             <AIConversation className="max-h-[calc(100vh-180px)]">
                 <AIConversationContent>

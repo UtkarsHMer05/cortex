@@ -55,55 +55,61 @@ export const WidgetSelectionScreen = () => {
     return (
         <>
             <WidgetHeader>
-                <div className="flex flex-col justify-between gap-y-2 px-2 py-6 font-semibold">
-                    <p className="text-3xl">
+                <div className="flex flex-col justify-between gap-y-1 px-1 py-5 font-semibold">
+                    <p className="text-2xl font-bold">
                         Hi there! 👋
                     </p>
-                    <p className="text-lg">
-                        Let&apos;s get you started
+                    <p className="text-sm font-normal opacity-85">
+                        How can we help you today?
                     </p>
                 </div>
             </WidgetHeader>
-            <div className="flex flex-1 flex-col gap-y-4 p-4 overflow-y-auto">
-                <Button
-                    className="h-16 w-full justify-between"
-                    variant="outline"
+            <div className="flex flex-1 flex-col gap-y-3 p-4 overflow-y-auto">
+                <button
+                    className="group flex w-full items-center gap-4 rounded-xl border bg-background p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none"
                     onClick={handleNewConversation}
                     disabled={isPending}
                 >
-                    <div className="flex items-center gap-x-2">
-                        <MessageSquareTextIcon className="size-4" />
-                        <span>Start chat</span>
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                        <MessageSquareTextIcon className="size-5" />
                     </div>
-                    <ChevronRightIcon />
-                </Button>
+                    <div className="flex-1 min-w-0">
+                        <span className="text-sm font-semibold">Start chat</span>
+                        <p className="text-xs text-muted-foreground mt-0.5">Chat with our AI assistant</p>
+                    </div>
+                    <ChevronRightIcon className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                </button>
                 {hasVapiSecrets && widgetSettings?.vapiSettings?.assistantId && (
-                    <Button
-                        className="h-16 w-full justify-between"
-                        variant="outline"
+                    <button
+                        className="group flex w-full items-center gap-4 rounded-xl border bg-background p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none"
                         onClick={() => setScreen("voice")}
                         disabled={isPending}
                     >
-                        <div className="flex items-center gap-x-2">
-                            <MicIcon className="size-4" />
-                            <span>Start voice call</span>
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-green-500/10 text-green-600 transition-colors group-hover:bg-green-500 group-hover:text-white">
+                            <MicIcon className="size-5" />
                         </div>
-                        <ChevronRightIcon />
-                    </Button>
+                        <div className="flex-1 min-w-0">
+                            <span className="text-sm font-semibold">Start voice call</span>
+                            <p className="text-xs text-muted-foreground mt-0.5">Talk to us directly</p>
+                        </div>
+                        <ChevronRightIcon className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </button>
                 )}
                 {hasVapiSecrets && widgetSettings?.vapiSettings?.phoneNumber && (
-                    <Button
-                        className="h-16 w-full justify-between"
-                        variant="outline"
+                    <button
+                        className="group flex w-full items-center gap-4 rounded-xl border bg-background p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none"
                         onClick={() => setScreen("contact")}
                         disabled={isPending}
                     >
-                        <div className="flex items-center gap-x-2">
-                            <PhoneIcon className="size-4" />
-                            <span>Call us</span>
+                        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-600 transition-colors group-hover:bg-orange-500 group-hover:text-white">
+                            <PhoneIcon className="size-5" />
                         </div>
-                        <ChevronRightIcon />
-                    </Button>
+                        <div className="flex-1 min-w-0">
+                            <span className="text-sm font-semibold">Call us</span>
+                            <p className="text-xs text-muted-foreground mt-0.5">Reach us by phone</p>
+                        </div>
+                        <ChevronRightIcon className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                    </button>
                 )}
             </div>
 

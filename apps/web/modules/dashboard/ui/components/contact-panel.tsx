@@ -190,27 +190,31 @@ export const ContactPanel = () => {
 
     return (
         <div className="flex h-full w-full flex-col bg-background text-foreground">
+            <div className="border-b px-4 py-3">
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Contact Details</h3>
+            </div>
             <div className="flex flex-col gap-y-4 p-4">
-                <div className="flex items-center gap-x-2">
+                <div className="flex items-center gap-x-3">
                     <DicebearAvatar
                         badgeImageUrl={countryInfo?.code ? getCountryFlagUrl(countryInfo.code) : undefined}
                         seed={contactSession._id}
                         size={42}
                     />
                     <div className="flex-1 overflow-hidden">
-                        <div className="flex items-center gap-x-2">
-                            <h4 className="line-clamp-1">
-                                {contactSession.name}
-                            </h4>
-                        </div>
-                        <p className="line-clamp-1 text-muted-foreground text-sm">
+                        <h4 className="line-clamp-1 text-sm font-semibold">
+                            {contactSession.name}
+                        </h4>
+                        <Link
+                            href={`mailto:${contactSession.email}`}
+                            className="line-clamp-1 text-xs text-primary hover:underline"
+                        >
                             {contactSession.email}
-                        </p>
+                        </Link>
                     </div>
                 </div>
                 <Button asChild className="w-full" size="lg">
                     <Link href={`mailto:${contactSession.email}`}>
-                        <MailIcon />
+                        <MailIcon className="size-4" />
                         <span>Send Email</span>
                     </Link>
                 </Button>

@@ -15,7 +15,7 @@ import {
 import { cn } from "@workspace/ui/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { usePaginatedQuery } from "convex/react";
-import { ArrowRightIcon, ArrowUpIcon, CheckIcon, CornerUpLeftIcon, ListIcon } from "lucide-react";
+import { ArrowRightIcon, ArrowUpIcon, CheckIcon, CornerUpLeftIcon, InboxIcon, ListIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConversationStatusIcon } from "@workspace/ui/components/conversation-status-icon";
@@ -51,39 +51,48 @@ export const ConversationsPanel = () => {
 
     return (
         <div className="flex h-full w-full flex-col bg-background text-sidebar-foreground">
-            <div className="flex flex-col gap-3.5 border-b p-2">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b px-4 py-3">
+                <div className="flex items-center gap-2">
+                    <h2 className="text-sm font-semibold tracking-tight">Conversations</h2>
+                    {!isLoadingFirstPage && conversations.results.length > 0 && (
+                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                            {conversations.results.length}
+                        </span>
+                    )}
+                </div>
                 <Select
                     defaultValue="all"
                     onValueChange={(value) => setStatusFilter(value as "all" | "unresolved" | "escalated" | "resolved")}
                     value={statusFilter}
                 >
                     <SelectTrigger
-                        className="h-8 border-none px-1.5 shadow-none ring-0 hover:bg-accent hover:text-accent-foreground focus-visible:ring-0"
+                        className="h-7 w-auto gap-1.5 border-none px-2 shadow-none ring-0 text-xs hover:bg-accent hover:text-accent-foreground focus-visible:ring-0"
                     >
                         <SelectValue placeholder="Filter" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">
                             <div className="flex items-center gap-2">
-                                <ListIcon className="size-4" />
+                                <ListIcon className="size-3.5" />
                                 <span>All</span>
                             </div>
                         </SelectItem>
                         <SelectItem value="unresolved">
                             <div className="flex items-center gap-2">
-                                <ArrowRightIcon className="size-4" />
+                                <ArrowRightIcon className="size-3.5" />
                                 <span>Unresolved</span>
                             </div>
                         </SelectItem>
                         <SelectItem value="escalated">
                             <div className="flex items-center gap-2">
-                                <ArrowUpIcon className="size-4" />
+                                <ArrowUpIcon className="size-3.5" />
                                 <span>Escalated</span>
                             </div>
                         </SelectItem>
                         <SelectItem value="resolved">
                             <div className="flex items-center gap-2">
-                                <CheckIcon className="size-4" />
+                                <CheckIcon className="size-3.5" />
                                 <span>Resolved</span>
                             </div>
                         </SelectItem>
@@ -92,6 +101,22 @@ export const ConversationsPanel = () => {
             </div>
             {isLoadingFirstPage ? (
                 <SkeletonConversations />
+            ) : conversations.results.length === 0 ? (
+                /* Empty state */
+                <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
+                    <div className="flex size-12 items-center justify-center rounded-full bg-muted">
+                        <InboxIcon className="size-5 text-muted-foreground" />
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-foreground">No conversations</p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                            {statusFilter === "all"
+                                ? "Conversations will appear here when customers reach out."
+                                : `No ${statusFilter} conversations found.`
+                            }
+                        </p>
+                    </div>
+                </div>
             ) : (
                 <ScrollArea className="max-h-[calc(100vh-53px)]">
                     <div className="flex w-full flex-1 flex-col text-sm">
@@ -106,20 +131,21 @@ export const ConversationsPanel = () => {
                             const countryFlagUrl = country?.code
                                 ? getCountryFlagUrl(country.code)
                                 : undefined;
+
+                            const isActive = pathname === `/conversations/${conversation._id}`;
+
                             return (
                                 <Link
                                     key={conversation._id}
                                     className={cn(
-                                        "relative flex cursor-pointer items-start gap-3 border-b p-4 py-5 text-sm leading-tight hover:bg-accent hover:text-accent-foreground",
-                                        pathname === `/conversations/${conversation._id}` &&
-                                        "bg-accent text-accent-foreground"
+                                        "relative flex cursor-pointer items-start gap-3 border-b p-4 py-5 text-sm leading-tight transition-colors duration-150 hover:bg-accent/70",
+                                        isActive && "bg-accent text-accent-foreground"
                                     )}
                                     href={`/conversations/${conversation._id}`}
                                 >
                                     <div className={cn(
-                                        "-translate-y-1/2 absolute top-1/2 left-0 h-[64%] w-1 rounded-r-full bg-neutral-300 opacity-0 transition-opacity",
-                                        pathname === `/conversations/${conversation._id}` &&
-                                        "opacity-100"
+                                        "-translate-y-1/2 absolute top-1/2 left-0 h-[64%] w-1 rounded-r-full bg-primary opacity-0 transition-all duration-200",
+                                        isActive && "opacity-100"
                                     )} />
 
                                     <DicebearAvatar
@@ -128,9 +154,9 @@ export const ConversationsPanel = () => {
                                         size={40}
                                         className="shrink-0"
                                     />
-                                    <div className="flex-1">
+                                    <div className="flex-1 min-w-0">
                                         <div className="flex w-full items-center gap-2">
-                                            <span className="truncate font-bold">
+                                            <span className="truncate font-semibold">
                                                 {conversation.contactSession.name}
                                             </span>
                                             <span className="ml-auto shrink-0 text-muted-foreground text-xs">
@@ -145,7 +171,7 @@ export const ConversationsPanel = () => {
                                                 <span
                                                     className={cn(
                                                         "line-clamp-1 text-muted-foreground text-xs",
-                                                        !isLastMessageFromOperator && "font-bold text-black"
+                                                        !isLastMessageFromOperator && "font-semibold text-foreground"
                                                     )}
                                                 >
                                                     {conversation.lastMessage?.text}
