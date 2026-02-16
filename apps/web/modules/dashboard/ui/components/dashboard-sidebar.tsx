@@ -3,6 +3,7 @@
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import {
     CreditCardIcon,
+    ExternalLinkIcon,
     InboxIcon,
     LayoutDashboardIcon,
     LibraryBigIcon,
@@ -37,6 +38,11 @@ const customerSupportItems = [
         title: "Knowledge Base",
         url: "/files",
         icon: LibraryBigIcon,
+    },
+    {
+        title: "Try Widget",
+        url: "/widget-redirect",
+        icon: ExternalLinkIcon,
     },
 ];
 const configuratorItems = [

@@ -39,7 +39,7 @@ export default function CTASection() {
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                         </a>
                         <a
-                            href="https://cortex-widget-utk.vercel.app/"
+                            href="https://cortex-utk.vercel.app/widget-redirect"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-white/40 text-white font-bold text-base hover:bg-white/10 hover:border-white/60 transition-all duration-300"

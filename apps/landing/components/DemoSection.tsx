@@ -109,7 +109,7 @@ export default function DemoSection() {
 
                         <div className="mt-10">
                             <a
-                                href="https://cortex-widget-utk.vercel.app/"
+                                href="https://cortex-utk.vercel.app/widget-redirect"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300"

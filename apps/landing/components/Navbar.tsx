@@ -45,7 +45,7 @@ export default function Navbar() {
                     {/* Desktop CTA */}
                     <div className="hidden md:flex items-center gap-3">
                         <a
-                            href="https://cortex-widget-utk.vercel.app/"
+                            href="https://cortex-utk.vercel.app/widget-redirect"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors px-4 py-2"
@@ -95,7 +95,7 @@ export default function Navbar() {
                             ))}
                             <div className="pt-3 border-t border-gray-100 space-y-2">
                                 <a
-                                    href="https://cortex-widget-utk.vercel.app/"
+                                    href="https://cortex-utk.vercel.app/widget-redirect"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="block text-sm font-medium text-blue-600 py-2"
