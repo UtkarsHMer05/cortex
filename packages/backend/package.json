@@ -4,7 +4,7 @@
     "scripts": {
         "dev": "convex dev",
         "setup": "convex dev --until-success",
-        "build": "convex dev --until-success"
+        "build": "convex deploy"
     },
     "exports": {
         "./convex": "./convex/*.ts"
