@@ -10,4 +10,4 @@ export const WIDGET_SCREENS = [
 ] as const;
 
 export const CONTACT_SESSION_KEY =
-    "echo_contact_session";
+    "cortex_contact_session";

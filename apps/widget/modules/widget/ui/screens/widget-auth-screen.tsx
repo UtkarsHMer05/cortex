@@ -110,7 +110,7 @@ export const WidgetAuthScreen = () => {
                                 <FormControl>
                                     <Input
                                         className="h-10 bg-background"
-                                        placeholder="e.g. [EMAIL_ADDRESS]"
+                                        placeholder="e.g. [EMAIL_ADDRESS]@gmail.com"
                                         type="email"
                                         {...field}
                                     />
