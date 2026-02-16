@@ -6,6 +6,11 @@
       "dependsOn": [
         "^build"
       ],
+      "env": [
+        "CONVEX_DEPLOY_KEY",
+        "CLERK_SECRET_KEY",
+        "SENTRY_AUTH_TOKEN"
+      ],
       "inputs": [
         "$TURBO_DEFAULT$",
         ".env*"
